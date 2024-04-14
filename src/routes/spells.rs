@@ -60,6 +60,28 @@ async fn get_spells() -> impl Responder {
     HttpResponse::Ok().json(spell)
 }
 
+#[get("/spells/{id}")]
+async fn get_spell(path: web::Path<Uuid>) -> impl Responder {
+    dotenv().ok();
+
+    let id = path.into_inner();
+
+    let database_string = env::var("DATABASE_CONNECTION_STRING")
+        .expect("DATABASE_CONNECTION_STRING must be set");
+
+    let mut conn = PgConnection::connect(&database_string)
+        .await
+        .expect("Failed to connect to database");
+
+    let spell = sqlx::query_as::<_, Spell>("Select * FROM public.spells WHERE id = $1")
+        .bind(id)
+        .fetch_one(&mut conn)
+        .await
+        .unwrap();
+
+    HttpResponse::Ok().json(spell)
+}
+
 #[post("/spells")]
 async fn create_spell(spell: web::Json<SpellRequest>) -> impl Responder {
     dotenv().ok();
