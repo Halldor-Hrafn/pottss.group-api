@@ -1,11 +1,10 @@
 extern crate dotenv;
 
 use dotenv::dotenv;
-use std::env;
 
 pub mod routes;
 
-use actix_web::{get, post, web, App, HttpResponse, HttpServer, Responder};
+use actix_web::{get, web, App, HttpResponse, HttpServer, Responder};
 
 use serde::{Serialize, Deserialize};
 
