@@ -1,6 +1,6 @@
 CREATE TABLE IF NOT EXISTS public.spells (
     id UUID NOT NULL DEFAULT gen_random_uuid(),
-    created_at TIMESTAMP WITH TIME ZONE NOT NULL DEFAULT now(),
+    created_at TIMESTAMP WITHOUT TIME ZONE NOT NULL DEFAULT now(),
     name TEXT NOT NULL,
     description TEXT NOT NULL,
     rank SMALLINT NOT NULL,
@@ -16,7 +16,7 @@ CREATE TABLE IF NOT EXISTS public.spells (
 
 CREATE TABLE IF NOT EXISTS public.traits (
     id UUID NOT NULL DEFAULT gen_random_uuid(),
-    created_at TIMESTAMP WITH TIME ZONE NOT NULL DEFAULT now(),
+    created_at TIMESTAMP WITHOUT TIME ZONE NOT NULL DEFAULT now(),
     name TEXT NOT NULL,
     description TEXT NOT NULL,
 
