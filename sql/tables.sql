@@ -32,6 +32,46 @@ CREATE TABLE IF NOT EXISTS public.spell_traits (
     CONSTRAINT spell_traits_trait_id_fk FOREIGN KEY (trait_id) REFERENCES public.traits (id)
 );
 
+CREATE TABLE IF NOT EXISTS public.equipment (
+    id UUID NOT NULL DEFAULT gen_random_uuid(),
+    created_at TIMESTAMP WITHOUT TIME ZONE NOT NULL DEFAULT now(),
+    name TEXT NOT NULL,
+    rarity TEXT NOT NULL,
+    item_category TEXT NOT NULL,
+    item_subcategory TEXT NULL,
+    level SMALLINT NOT NULL,
+    price TEXT NOT NULL,
+    bulk TEXT NOT NULL,
+    usage TEXT NOT NULL,
+    json_data JSONB NOT NULL,
+
+    CONSTRAINT equipment_pk PRIMARY KEY (id)
+);
+
+CREATE TABLE IF NOT EXISTS public.equipment_traits (
+    equipment_id UUID NOT NULL,
+    trait_id UUID NOT NULL,
+
+    CONSTRAINT equipment_traits_pk PRIMARY KEY (equipment_id, trait_id),
+    CONSTRAINT equipment_traits_equipment_id_fk FOREIGN KEY (equipment_id) REFERENCES public.equipment (id),
+    CONSTRAINT equipment_traits_trait_id_fk FOREIGN KEY (trait_id) REFERENCES public.traits (id)
+);
+
+CREATE TABLE IF NOT EXISTS public.equipment_bonuses (
+    id UUID NOT NULL DEFAULT gen_random_uuid(),
+    created_at TIMESTAMP WITHOUT TIME ZONE NOT NULL DEFAULT now(),
+    equipment_id UUID NOT NULL,
+    ability_skill TEXT NOT NULL,
+    bonus TEXT NOT NULL,
+    category TEXT NOT NULL,
+    subcategory TEXT NULL,
+    consumable BOOLEAN NOT NULL,
+    note TEXT NULL
+
+    CONSTRAINT equipment_bonuses_pk PRIMARY KEY (id),
+    CONSTRAINT equipment_bonuses_equipment_id_fk FOREIGN KEY (equipment_id) REFERENCES public.equipment (id)
+);
+
 INSERT INTO public.traits (name, description) VALUES ('Cantrip', 'A spell you can cast at will that is automatically heightened to half your level rounded up.');
 
 INSERT INTO public.spells (name, description, rank, range, area, duration, actions, components) VALUES ('Approximate',

@@ -24,10 +24,29 @@ pub struct Trait {
 pub struct TraitRequest {
     pub name: String,
     pub description: String,
+    _type: String,
+}
+
+async fn insert_spells_trait(conn: &mut PgConnection, spell_id: Uuid, trait_id: Uuid) {
+    sqlx::query("INSERT INTO public.spells_traits (spell_id, trait_id) VALUES ($1, $2)")
+        .bind(spell_id)
+        .bind(trait_id)
+        .execute(conn)
+        .await
+        .unwrap();
+}
+
+async fn insert_equipment_trait(conn: &mut PgConnection, equipment_id: Uuid, trait_id: Uuid) {
+    sqlx::query("INSERT INTO public.equipment_traits (equipment_id, trait_id) VALUES ($1, $2)")
+        .bind(equipment_id)
+        .bind(trait_id)
+        .execute(conn)
+        .await
+        .unwrap();
 }
 
 #[get("/traits")]
-pub async fn get_traits() -> impl Responder {
+async fn get_traits() -> impl Responder {
     dotenv().ok();
 
     let database_string = env::var("DATABASE_CONNECTION_STRING")
